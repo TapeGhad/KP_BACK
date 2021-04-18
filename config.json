@@ -1,0 +1,9 @@
+{
+  "db": {
+    "connectionString": "mongodb+srv://TapeGhad:12345qwert@kp.mc0lt.mongodb.net/KP?retryWrites=true&w=majority",
+    "remoteAccess": "mongodb://localhost:27017/mondo"
+  },
+  "url": {
+    "localhost": "http://localhost:3000"
+  }
+}
