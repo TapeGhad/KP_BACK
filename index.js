@@ -6,7 +6,7 @@ const sockets = require("./global-controllers/socket");
 
 const app = server.listen(4000, () => {
   console.log("Running")
-  sockets.sockets(app);
+  sockets.sockets(app, db);
 });
 
 

@@ -18,6 +18,9 @@ module.exports = (mongoose, Schema) => {
         required: true,
         default: false
       },
+      name: {
+        type: String,
+      }
 
     },
     { versionKey: false,

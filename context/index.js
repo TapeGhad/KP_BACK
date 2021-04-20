@@ -18,7 +18,13 @@ module.exports = (mongoose) => {
     Schema
   );
 
+  const Chat = require("../modules/chat/chat.model")(
+    mongoose,
+    Schema
+  );
+
   return {
     users: User,
+    chat: Chat,
   };
 };
