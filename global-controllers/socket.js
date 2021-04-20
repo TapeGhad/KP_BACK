@@ -10,11 +10,11 @@ const sockets = (server, db) => {
         console.log("New user (socket.io) connected");
         socket.on('getChat', async () => {
             const messages = await db.chat.find({}, { _id: 0 });
-            socketIO.emit('allChat', { messages });
+            socketIO.emit('allChat', messages);
         })
         socket.on('message', async (message, name) => {
-            await db.chat.create({ name, message, date: new Date() });
-            socketIO.emit('chatUpdate', { message, name });
+            const messageNew = await db.chat.create({ name, message, date: new Date() });
+            socketIO.emit('chatUpdate', messageNew);
         })
     });
 };

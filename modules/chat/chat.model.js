@@ -8,6 +8,7 @@ module.exports = (mongoose, Schema) => {
         date: {
           type: Date,
           required: true,
+          expires: 86400
         },
         name: {
           type: String,
