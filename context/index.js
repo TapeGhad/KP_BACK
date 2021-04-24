@@ -18,6 +18,11 @@ module.exports = (mongoose) => {
     Schema
   );
 
+  const Subject = require("../modules/users/subject.model")(
+    mongoose,
+    Schema
+  );
+
   const Chat = require("../modules/chat/chat.model")(
     mongoose,
     Schema
@@ -25,6 +30,7 @@ module.exports = (mongoose) => {
 
   return {
     users: User,
+    subject: Subject,
     chat: Chat,
   };
 };

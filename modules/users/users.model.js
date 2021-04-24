@@ -16,12 +16,33 @@ module.exports = (mongoose, Schema) => {
       emailNotif: {
         type: Boolean,
         required: true,
-        default: false
+        default: true,
       },
       name: {
         type: String,
-      }
-
+      },
+      rating: {
+        type: String,
+      },
+      subject: {
+        type: String,
+      },
+      expa: {
+        type: String,
+      },
+      comeFrom: {
+        type: String,
+      },
+      personalMsg: {
+        type: Boolean,
+        default: true,
+      },
+      about: {
+        type: String,
+      },
+      price: {
+        type: Number,
+      },
     },
     { versionKey: false,
       timestamps: true }

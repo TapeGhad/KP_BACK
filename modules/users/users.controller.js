@@ -6,12 +6,26 @@ class UsersController extends CrudController {
 
     this.checkToken = this.checkToken.bind(this);
     this.changeEmailNotif = this.changeEmailNotif.bind(this);
+    this.subjectsList = this.subjectsList.bind(this);
+    this.becomeRep = this.becomeRep.bind(this);
 
     this.routes = {
       "/check": [
         {
           method: "get",
           cb: this.checkToken,
+        },
+      ],
+      "/subjectsList": [
+        {
+          method: "get",
+          cb: this.subjectsList,
+        },
+      ],
+      "/becomeRep": [
+        {
+          method: "post",
+          cb: this.becomeRep,
         },
       ],
       "/changeEmailNotif": [
@@ -28,6 +42,16 @@ class UsersController extends CrudController {
     res.json({
       success: true
     });
+  }
+
+  async subjectsList(req, res) {
+    const data =  await this.service.subjectsList(req);
+    res.json(data);
+  }
+
+  async becomeRep(req, res) {
+    const data =  await this.service.becomeRep(req);
+    res.json(data);
   }
 
   async changeEmailNotif(req, res) {

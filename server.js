@@ -23,7 +23,7 @@ module.exports = (db) => {
   // Services
   const usersService = new UsersService(
     db.users,
-    db.pairs,
+    db.subject,
     bcrypt,
     sendMessageOnEmail,
     errors
