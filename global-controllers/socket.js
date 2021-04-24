@@ -6,15 +6,26 @@ const sockets = (server, db) => {
           origin: '*',
         }
     });
+    let usersOnline = 0;
 	socketIO.on("connection", (socket) => {
-        console.log("New user (socket.io) connected");
+        usersOnline++;
+        console.log('USERS ONLINE:', usersOnline);
+        socketIO.emit('usersOnline', usersOnline);
         socket.on('getChat', async () => {
             const messages = await db.chat.find({}, { _id: 0 });
             socketIO.emit('allChat', messages);
-        })
+        });
+        socket.on('usersOnlineCheck', () => {
+            socketIO.emit('usersOnline', usersOnline);
+        });
         socket.on('message', async (message, name) => {
             const messageNew = await db.chat.create({ name, message, date: new Date() });
             socketIO.emit('chatUpdate', messageNew);
+        })
+        socket.on('disconnect', () => {
+            usersOnline--;
+            console.log('USERS ONLINE:', usersOnline);
+            socketIO.emit('usersOnline', usersOnline);
         })
     });
 };

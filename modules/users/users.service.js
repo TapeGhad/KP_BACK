@@ -25,7 +25,7 @@ class UsersService extends CrudService {
 
   async becomeRep(req) {
     const user = await this.repository.findOne({email: req.info.email});
-    user.rating = 7;
+    user.rating = 3;
     user.subject = req.body.subject;
     user.expa = req.body.expa;
     user.comeFrom = req.body.comeFrom;
