@@ -23,6 +23,17 @@ module.exports = (mongoose, Schema) => {
         required: true,
         default: [],
       },
+      phone: {
+        type: String,
+      },
+      faivouritesStud: {
+        type: Array,
+        required: true,
+        default: [],
+      },
+      materials: {
+        type: Array,
+      },
       name: {
         type: String,
       },

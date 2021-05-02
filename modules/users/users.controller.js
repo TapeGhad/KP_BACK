@@ -11,6 +11,8 @@ class UsersController extends CrudController {
     this.usersWithParams = this.usersWithParams.bind(this);
     this.addFav = this.addFav.bind(this);
     this.removeFav = this.removeFav.bind(this);
+    this.repInfo = this.repInfo.bind(this);
+    this.newMaterial = this.newMaterial.bind(this);
 
     this.routes = {
       "/check": [
@@ -55,6 +57,18 @@ class UsersController extends CrudController {
           cb: this.removeFav,
         },
       ],
+      "/repInfo": [
+        {
+          method: "post",
+          cb: this.repInfo,
+        },
+      ],
+      "/newMaterial": [
+        {
+          method: "post",
+          cb: this.newMaterial,
+        },
+      ],
     };
     this.registerRoutes();
   }
@@ -70,8 +84,19 @@ class UsersController extends CrudController {
     res.json(data);
   }
 
+  async repInfo(req, res) {
+    const data = await this.service.repInfo(req);
+    res.json(data);
+  }
+
   async becomeRep(req, res) {
     const data =  await this.service.becomeRep(req);
+    res.json(data);
+  }
+
+  async newMaterial(req, res) {
+    const data =  await this.service.newMaterial(req);
+    console.log(data);
     res.json(data);
   }
 

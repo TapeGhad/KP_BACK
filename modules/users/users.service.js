@@ -20,15 +20,26 @@ class UsersService extends CrudService {
   }
 
   async addFav(req) {
+    await this.repository.findByIdAndUpdate(req.body.id, {$push: {faivouritesStud: req.info.id}}, {new: true})
     return this.repository.findByIdAndUpdate(req.info.id, {$push: {faivourites: req.body.id}}, {new: true})
   }
 
   async removeFav(req) {
-    return this.repository.findByIdAndUpdate(req.info.id, { $pull: {faivourites: req.body.id } }, {new: true})
+    await this.repository.findByIdAndUpdate(req.body.id, { $pull: {faivouritesStud: req.info.id } }, {new: true})
+    return this.repository.findByIdAndUpdate(req.info.id, { $pull: {faivourites: req.body.id } }, {new: true});
   }
 
   async subjectsList(req) {
     return this.subjectsRepository.find({});
+  }
+
+  async repInfo(req) {
+    return this.repository.findById(req.body.id);
+  }
+
+  async newMaterial(req) {
+    console.log(req.body.material);
+    return this.repository.findByIdAndUpdate(req.info.id, { $push: {materials: req.body.material } }, {new: true});
   }
 
   async usersWithParams(req) {
@@ -56,6 +67,7 @@ class UsersService extends CrudService {
     user.about = req.body.about;
     user.price = req.body.price;
     user.role = 'rep';
+    user.phone = req.body.phone;
     user.save();
     const subject = await this.subjectsRepository.findOne({name: req.body.subject});
     subject.averagePrice = parseFloat(((subject.averagePrice + req.body.price) / 2).toFixed(1));
