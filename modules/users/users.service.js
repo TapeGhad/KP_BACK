@@ -19,8 +19,30 @@ class UsersService extends CrudService {
     return this.repository.updateOne({email: req.info.email}, {$set: {emailNotif: req.body.emailNotif}});
   }
 
+  async addFav(req) {
+    return this.repository.findByIdAndUpdate(req.info.id, {$push: {faivourites: req.body.id}}, {new: true})
+  }
+
+  async removeFav(req) {
+    return this.repository.findByIdAndUpdate(req.info.id, { $pull: {faivourites: req.body.id } }, {new: true})
+  }
+
   async subjectsList(req) {
     return this.subjectsRepository.find({});
+  }
+
+  async usersWithParams(req) {
+    console.log(req.body);
+    if (req.body.user === 'rep') {
+      try{
+        let data;
+        data = await this.repository.find({role: 'rep'}).skip(req.body.params.itemsPerPage * (req.body.params.page - 1)).limit(req.body.params.itemsPerPage);
+        return data;
+      } catch (e) {
+        console.log(e);
+      }
+    }
+    return [];
   }
 
   async becomeRep(req) {

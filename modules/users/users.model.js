@@ -18,6 +18,11 @@ module.exports = (mongoose, Schema) => {
         required: true,
         default: true,
       },
+      faivourites: {
+        type: Array,
+        required: true,
+        default: [],
+      },
       name: {
         type: String,
       },

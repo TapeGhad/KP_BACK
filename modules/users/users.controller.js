@@ -1,5 +1,5 @@
 const CrudController = require("../crud/crud.controller");
-
+const jwt = require("jsonwebtoken");
 class UsersController extends CrudController {
   constructor(usersService) {
     super(usersService);
@@ -8,6 +8,9 @@ class UsersController extends CrudController {
     this.changeEmailNotif = this.changeEmailNotif.bind(this);
     this.subjectsList = this.subjectsList.bind(this);
     this.becomeRep = this.becomeRep.bind(this);
+    this.usersWithParams = this.usersWithParams.bind(this);
+    this.addFav = this.addFav.bind(this);
+    this.removeFav = this.removeFav.bind(this);
 
     this.routes = {
       "/check": [
@@ -33,7 +36,25 @@ class UsersController extends CrudController {
           method: "post",
           cb: this.changeEmailNotif,
         },
-      ]
+      ],
+      "/params": [
+        {
+          method: "post",
+          cb: this.usersWithParams,
+        },
+      ],
+      "/addFav": [
+        {
+          method: "post",
+          cb: this.addFav,
+        },
+      ],
+      "/removeFav": [
+        {
+          method: "post",
+          cb: this.removeFav,
+        },
+      ],
     };
     this.registerRoutes();
   }
@@ -59,6 +80,45 @@ class UsersController extends CrudController {
     res.json({
       success: true
     });
+  }
+
+  async usersWithParams(req, res) {
+    const data =  await this.service.usersWithParams(req);
+    res.json([...data]);
+  }
+
+  async addFav(req, res) {
+    const user =  await this.service.addFav(req);
+    const token = await this.getToken(user);
+
+    res.json({
+      user,
+      token,
+    });
+  }
+
+  async removeFav(req, res) {
+    const user =  await this.service.removeFav(req);
+    const token = await this.getToken(user);
+
+    res.json({
+      user,
+      token,
+    });
+  }
+
+  async getToken(user) {
+    return jwt.sign(
+      {
+        id: user._id,
+        email: user.email,
+        role: user.role,
+      },
+      process.env.JWT_KEY,
+      {
+        expiresIn: 60 * 60 * 24 * 10,
+      }
+    );
   }
 }
 
