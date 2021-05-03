@@ -38,8 +38,11 @@ class UsersService extends CrudService {
   }
 
   async newMaterial(req) {
-    console.log(req.body.material);
     return this.repository.findByIdAndUpdate(req.info.id, { $push: {materials: req.body.material } }, {new: true});
+  }
+
+  async deleteMaterial(req) {
+    return this.repository.findByIdAndUpdate(req.info.id, { $pull: {materials: { title: req.body.title} } }, {new: true});
   }
 
   async usersWithParams(req) {
