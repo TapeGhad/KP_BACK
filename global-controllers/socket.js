@@ -21,7 +21,10 @@ const sockets = (server, db) => {
         socket.on('message', async (message, name) => {
             const messageNew = await db.chat.create({ name, message, date: new Date() });
             socketIO.emit('chatUpdate', messageNew);
-        })
+        });
+        socket.on('personalMsg', async (msg) => {
+            socketIO.emit('personalMsg', msg);
+        });
         socket.on('disconnect', () => {
             usersOnline--;
             console.log('USERS ONLINE:', usersOnline);
