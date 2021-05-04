@@ -31,6 +31,16 @@ module.exports = (mongoose, Schema) => {
         required: true,
         default: [],
       },
+      currentStud: {
+        type: Array,
+        required: true,
+        default: [],
+      },
+      teachers: {
+        type: Array,
+        required: true,
+        default: [],
+      },
       materials: {
         type: Array,
       },

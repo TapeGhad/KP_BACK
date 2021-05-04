@@ -33,8 +33,19 @@ class UsersService extends CrudService {
     return this.subjectsRepository.find({});
   }
 
+  async getUserInfo(req) {
+    return this.repository.findById(req.info.id);
+  }
+
   async repInfo(req) {
-    return this.repository.findById(req.body.id);
+    const rep = await this.repository.findById(req.body.id).lean();
+    rep.faivouritesStud = await Promise.all(rep.faivouritesStud.map((id) => {
+      return this.repository.findById(id);
+    }));
+    rep.currentStud = await Promise.all(rep.currentStud.map((id) => {
+      return this.repository.findById(id);
+    }));
+    return rep;
   }
 
   async newMaterial(req) {
@@ -43,6 +54,23 @@ class UsersService extends CrudService {
 
   async deleteMaterial(req) {
     return this.repository.findByIdAndUpdate(req.info.id, { $pull: {materials: { title: req.body.title} } }, {new: true});
+  }
+
+  async acceptUser(req) {
+    await this.repository.findByIdAndUpdate(req.info.id, {$push: {currentStud: req.body.id}}, {new: true});
+    await this.repository.findByIdAndUpdate(req.info.id, {$pull: {faivouritesStud: req.body.id}}, {new: true});
+    await this.repository.findByIdAndUpdate(req.body.id, {$pull: {faivourites: req.info.id}}, {new: true});
+    return await this.repository.findByIdAndUpdate(req.body.id, {$push: {teachers: req.info.id}}, {new: true});
+  }
+
+  async rejectUser(req) {
+    await this.repository.findByIdAndUpdate(req.info.id, {$pull: {faivouritesStud: req.body.id}}, {new: true});
+    return await this.repository.findByIdAndUpdate(req.body.id, {$pull: {faivourites: req.info.id}}, {new: true});
+  }
+
+  async removeUser(req) {
+    await this.repository.findByIdAndUpdate(req.info.id, {$pull: {currentStud: req.body.id}}, {new: true});
+    return await this.repository.findByIdAndUpdate(req.body.id, {$pull: {teachers: req.info.id}}, {new: true});
   }
 
   async usersWithParams(req) {

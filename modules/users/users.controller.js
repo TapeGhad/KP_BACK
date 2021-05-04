@@ -14,6 +14,10 @@ class UsersController extends CrudController {
     this.repInfo = this.repInfo.bind(this);
     this.newMaterial = this.newMaterial.bind(this);
     this.deleteMaterial = this.deleteMaterial.bind(this);
+    this.acceptUser = this.acceptUser.bind(this);
+    this.rejectUser = this.rejectUser.bind(this);
+    this.removeUser = this.removeUser.bind(this);
+    this.updateUserInfo = this.updateUserInfo.bind(this);
 
     this.routes = {
       "/check": [
@@ -76,6 +80,30 @@ class UsersController extends CrudController {
           cb: this.deleteMaterial,
         },
       ],
+      "/acceptUser": [
+        {
+          method: "post",
+          cb: this.acceptUser,
+        },
+      ],
+      "/rejectUser": [
+        {
+          method: "post",
+          cb: this.rejectUser,
+        },
+      ],
+      "/removeUser": [
+        {
+          method: "post",
+          cb: this.removeUser,
+        },
+      ],
+      "/updateUserInfo": [
+        {
+          method: "get",
+          cb: this.updateUserInfo,
+        },
+      ],
     };
     this.registerRoutes();
   }
@@ -111,6 +139,21 @@ class UsersController extends CrudController {
     res.json(data);
   }
 
+  async acceptUser(req, res) {
+    const data =  await this.service.acceptUser(req);
+    res.json(data);
+  }
+
+  async rejectUser(req, res) {
+    const data =  await this.service.rejectUser(req);
+    res.json(data);
+  }
+
+  async removeUser(req, res) {
+    const data =  await this.service.removeUser(req);
+    res.json(data);
+  }
+
   async changeEmailNotif(req, res) {
     await this.service.changeEmailNotif(req);
     res.json({
@@ -125,6 +168,16 @@ class UsersController extends CrudController {
 
   async addFav(req, res) {
     const user =  await this.service.addFav(req);
+    const token = await this.getToken(user);
+
+    res.json({
+      user,
+      token,
+    });
+  }
+
+  async updateUserInfo(req, res) {
+    const user =  await this.service.getUserInfo(req);
     const token = await this.getToken(user);
 
     res.json({
