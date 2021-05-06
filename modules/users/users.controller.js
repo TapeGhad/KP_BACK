@@ -18,6 +18,7 @@ class UsersController extends CrudController {
     this.rejectUser = this.rejectUser.bind(this);
     this.removeUser = this.removeUser.bind(this);
     this.updateUserInfo = this.updateUserInfo.bind(this);
+    this.updateRepRating = this.updateRepRating.bind(this);
 
     this.routes = {
       "/check": [
@@ -104,6 +105,12 @@ class UsersController extends CrudController {
           cb: this.updateUserInfo,
         },
       ],
+      "/updateRepRating": [
+        {
+          method: "post",
+          cb: this.updateRepRating,
+        },
+      ],
     };
     this.registerRoutes();
   }
@@ -183,6 +190,14 @@ class UsersController extends CrudController {
     res.json({
       user,
       token,
+    });
+  }
+
+  async updateRepRating(req, res) {
+    const user =  await this.service.updateRepRating(req);
+
+    res.json({
+      user
     });
   }
 

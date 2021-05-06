@@ -37,6 +37,14 @@ class UsersService extends CrudService {
     return this.repository.findById(req.info.id);
   }
 
+  async updateRepRating(req) {
+    console.log(req.body);
+    const user = await this.repository.findById(req.body.info.rep);
+    user.rating = ((parseFloat(user.rating) + parseFloat(req.body.info.rating)) / 2).toFixed(1);
+    await user.save();
+    return user;
+  }
+
   async repInfo(req) {
     const rep = await this.repository.findById(req.body.id).lean();
     rep.faivouritesStud = await Promise.all(rep.faivouritesStud.map((id) => {
