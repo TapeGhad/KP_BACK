@@ -41,6 +41,7 @@ class UsersService extends CrudService {
     console.log(req.body);
     const user = await this.repository.findById(req.body.info.rep);
     user.rating = ((parseFloat(user.rating) + parseFloat(req.body.info.rating)) / 2).toFixed(1);
+    user.ratingHistory.push({ rating: user.rating, date: Date.now()});
     await user.save();
     return user;
   }
