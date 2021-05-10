@@ -22,12 +22,9 @@ module.exports = {
       to: dataCome.to,
       subject: constant.NODEMAILER_EMAIL_SUBJECT,
       html: compiledFunction({
-        fsym: dataCome.fsym,
-        tsym: dataCome.tsym,
-        currency: dataCome.currency,
+        userEmail: dataCome.userEmail,
         date: new Date(),
         currentYear: new Date().getFullYear(),
-        type: dataCome.type === "min" ? constant.NODEMAILER_MINIMAL_TEXT : constant.NODEMAILER_MAXIMAL_TEXT
       })
     });
 

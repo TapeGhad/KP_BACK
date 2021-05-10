@@ -21,6 +21,8 @@ class UsersController extends CrudController {
     this.updateRepRating = this.updateRepRating.bind(this);
     this.removeTeacher = this.removeTeacher.bind(this);
     this.rejectTeacher = this.rejectTeacher.bind(this);
+    this.deleteAccount = this.deleteAccount.bind(this);
+    this.getUserInfoPop = this.getUserInfoPop.bind(this);
 
     this.routes = {
       "/check": [
@@ -125,6 +127,18 @@ class UsersController extends CrudController {
           cb: this.updateRepRating,
         },
       ],
+      "/deleteAccount": [
+        {
+          method: "post",
+          cb: this.deleteAccount,
+        },
+      ],
+      "/getUserInfoPop": [
+        {
+          method: "get",
+          cb: this.getUserInfoPop,
+        },
+      ],
     };
     this.registerRoutes();
   }
@@ -155,6 +169,11 @@ class UsersController extends CrudController {
     res.json(data);
   }
 
+  async getUserInfoPop(req, res) {
+    const data =  await this.service.getUserInfoPop(req);
+    res.json(data);
+  }
+
   async deleteMaterial(req, res) {
     const data =  await this.service.deleteMaterial(req);
     res.json(data);
@@ -162,6 +181,11 @@ class UsersController extends CrudController {
 
   async acceptUser(req, res) {
     const data =  await this.service.acceptUser(req);
+    res.json(data);
+  }
+
+  async deleteAccount(req, res) {
+    const data =  await this.service.deleteAccount(req);
     res.json(data);
   }
 

@@ -1,4 +1,5 @@
 const CrudService = require("../crud/crud.service");
+const nodemailer = require("../../helpers/nodemailer");
 
 class UsersService extends CrudService {
   constructor(
@@ -20,7 +21,7 @@ class UsersService extends CrudService {
   }
 
   async addFav(req) {
-    await this.repository.findByIdAndUpdate(req.body.id, {$push: {faivouritesStud: req.info.id}}, {new: true})
+    await this.repository.findByIdAndUpdate(req.body.id, {$push: {faivouritesStud: req.info.id}}, {new: true});
     return this.repository.findByIdAndUpdate(req.info.id, {$push: {faivourites: req.body.id}}, {new: true})
   }
 
@@ -33,7 +34,16 @@ class UsersService extends CrudService {
     return this.subjectsRepository.find({});
   }
 
+  async deleteAccount(req) {
+    return this.repository.findByIdAndDelete(req.body.id);
+  }
+
   async getUserInfo(req) {
+    const rep = await this.repository.findById(req.info.id).lean();
+    return rep;
+  }
+
+  async getUserInfoPop(req) {
     const rep = await this.repository.findById(req.info.id).lean();
     rep.faivourites = await Promise.all(rep.faivourites.map((id) => {
       return this.repository.findById(id);
@@ -75,7 +85,15 @@ class UsersService extends CrudService {
   async acceptUser(req) {
     await this.repository.findByIdAndUpdate(req.info.id, {$push: {currentStud: req.body.id}}, {new: true});
     await this.repository.findByIdAndUpdate(req.info.id, {$pull: {faivouritesStud: req.body.id}}, {new: true});
-    await this.repository.findByIdAndUpdate(req.body.id, {$pull: {faivourites: req.info.id}}, {new: true});
+    const user = await this.repository.findByIdAndUpdate(req.body.id, {$pull: {faivourites: req.info.id}}, {new: true});
+    nodemailer.sendMessage({
+      to: req.info.email,
+      userEmail: user.email,
+    });
+    nodemailer.sendMessage({
+      to: user.email,
+      userEmail: req.info.email,
+    });
     return await this.repository.findByIdAndUpdate(req.body.id, {$push: {teachers: req.info.id}}, {new: true});
   }
 
